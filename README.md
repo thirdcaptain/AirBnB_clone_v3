@@ -42,6 +42,8 @@ Commands | Description | Usage
 **destroy** | Deletes and instance base on the class name and id. | **destroy** \<class_name class_id\>
 **all** | Prints all string representation of all instances based or not on the class name | **all** or **all** \<class_name class_id\>
 **update** | Updates an instance based on the class name and id by adding or updating attribute | **update** \<class_name class_id key value\>
+**get** | Retrieve an object using UUID | **get** 
+**count** | Count number of objects in storage | **count** | 
 
 ## Resources
 * Fabric: [Usage1](https://www.digitalocean.com/community/tutorials/how-to-use-fabric-to-automate-administration-tasks-and-deployments), [Usage2](https://www.pythonforbeginners.com/systems-programming/how-to-use-fabric-in-python), [Documenation](http://www.fabfile.org/)
