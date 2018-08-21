@@ -78,3 +78,41 @@ class FileStorage:
         Deserialize JSON file to objects
         '''
         self.reload()
+
+    def get(self, cls, id):
+        '''
+        A method to retrieve one object
+        Args:
+            cls: string representing the class name
+            id: string representing the object ID
+        Returns:
+        '''
+        temp_dict = {}
+        if id is None:
+            return None
+        if id != "":
+            for k, v in self.__objects.items():
+                if id == k.split(".")[1]:
+                    temp_dict[k] = v
+                    return temp_dict.get(k)
+        else:
+            return None
+
+    def count(self, cls=None):
+        '''
+        A method to count the number of objects in storage
+        Args:
+            cls: string representing the class name
+        '''
+        count = 0
+        if cls == "":
+            return None
+        if cls is None:
+            for k, v in self.__objects.items():
+                count += 1
+            return count
+        else:
+            for k, v in self.__objects.items():
+                if cls == k.split(".")[0]:
+                    count += 1
+            return count
