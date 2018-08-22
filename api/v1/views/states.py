@@ -46,20 +46,14 @@ def delete_states(state_id):
     """
     empty_dict = {}
     obj_list = []
-    json_list = []
 
     try:
-        json_states = storage.all("State")
-        for state_obj in json_states.values():
-            obj_list.append(state_obj)
-        for state_obj in obj_list:
-            if state_obj.id == state_id:
-                storage.delete(state_obj)
-                storage.save()
-                return jsonify(empty_dict), 200
+        json_states = storage.get("State", state_id)
+        json_states.delete()
+        storage.save()
+        return jsonify(empty_dict), 200
     except Exception:
         abort(404)
-    abort(404)
 
 
 @app_views.route("/states", methods=['POST'])
