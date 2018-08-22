@@ -58,6 +58,9 @@ def delete_states(state_id):
 
 @app_views.route("/states", methods=['POST'])
 def post_states():
+    """
+        post method
+    """
     content = request.get_json()
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
@@ -72,6 +75,23 @@ def post_states():
     return jsonify(new_state.to_dict()), 200
 
 
-#@app_views.route("/states", methods=['PUT'])
-#def put_states():
-#    content = request
+@app_views.route("/states/<state_id>", methods=['PUT'])
+def put_states(state_id):
+    """
+        put method
+    """
+    obj_list = []
+    content = request.get_json()
+    if content is None:
+        return jsonify({"error": "Not a JSON"}), 400
+    print(content)
+    json_states = storage.all("State")
+    for state_obj in json_states.values():
+        obj_list.append(state_obj)
+    for state in obj_list:
+        if state.id == state_id:
+            for k, v in content.items():
+                setattr(state, k, v)
+            new_state = state
+    storage.save()
+    return jsonify(new_state.to_dict()), 200
