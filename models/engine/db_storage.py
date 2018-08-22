@@ -99,7 +99,7 @@ class DBStorage:
             Object based on the class name and its ID
         """
         if cls != "":
-            objs = self.__session.query(models.classes[cls]).all()
+            objs = self.all().values()
             for obj in objs:
                 if id == obj.id:
                     return obj
