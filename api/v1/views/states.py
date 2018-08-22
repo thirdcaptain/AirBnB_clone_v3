@@ -80,11 +80,14 @@ def put_states(state_id):
     """
         put method
     """
+    new_state = None
     obj_list = []
     content = request.get_json()
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
-    print(content)
+    exclude = ['id', 'created_at', 'updated_at']
+    for e in exclude:
+        content.pop(e, None)
     json_states = storage.all("State")
     for state_obj in json_states.values():
         obj_list.append(state_obj)
@@ -93,5 +96,7 @@ def put_states(state_id):
             for k, v in content.items():
                 setattr(state, k, v)
             new_state = state
+    if new_state is None:
+        return jsonify({"error": "Not found"}), 404
     storage.save()
     return jsonify(new_state.to_dict()), 200
