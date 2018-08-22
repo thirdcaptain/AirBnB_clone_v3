@@ -98,13 +98,13 @@ class DBStorage:
         Returns:
             Object based on the class name and its ID
         """
-        if cls != "":
-            objs = self.all().values()
-            for obj in objs:
-                if id == obj.id:
-                    return obj
-        else:
-            return None
+        result = None
+
+        objs = self.all(cls).values()
+        for obj in objs:
+            if id == obj.id:
+                result = obj
+        return result
 
     def count(self, cls=None):
         """
