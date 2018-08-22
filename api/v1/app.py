@@ -6,6 +6,8 @@ import os
 from flask import Flask
 from models import storage
 from api.v1.views import app_views
+from flask import jsonify
+from flask import make_response
 
 
 app = Flask(__name__)
@@ -17,6 +19,12 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 @app.teardown_appcontext
 def teardown(exception):
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    error_status = {"error": "Not found"}
+    return make_response(jsonify(error_status), 404)
 
 
 if __name__ == "__main__":
