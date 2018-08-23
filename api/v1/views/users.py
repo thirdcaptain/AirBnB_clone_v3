@@ -42,60 +42,58 @@ def get_user(user_id):
 
 @app_views.route("/users/<user_id>", methods=['DELETE'])
 def delete_user(user_id):
-   """
-   deletes a user
-   """
-   empty_dict = {}
+    """
+    deletes a user
+    """
+    empty_dict = {}
 
-   try:
-       json_user = storage.get("User", user_id)
-       json_user.delete()
-       storage.save()
-       return jsonify(empty_dict), 200
-   except Exception:
-       abort(404)
+    try:
+        json_user = storage.get("User", user_id)
+        json_user.delete()
+        storage.save()
+        return jsonify(empty_dict), 200
+    except Exception:
+        abort(404)
 
 
-@app_views.route("/states", methods=['POST'])
-def post_states():
-   """
-   posts a user
-   """
+@app_views.route("/users", methods=['POST'])
+def post_user():
+    """
+    posts a user
+    """
     content = request.get_json()
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
-    if "name" not in content:
-        return jsonify({"error": "Missing name"}), 400
-    exclude = ['id', 'created_at', 'updated_at']
-    for e in exclude:
-        content.pop(e, None)
-    new_state = State(**content)
-    storage.new(new_state)
-    storage.save()
-    return jsonify(new_state.to_dict()), 200
+    if "email" not in content:
+        return jsonify({"error": "Missing email"}), 400
+    if "password" not in content:
+        return jsonify({"error": "Missing password"}), 400
 
-"""
-@app_views.route("/states/<state_id>", methods=['PUT'])
-def put_states(state_id):
-   
-    new_state = None
+    user_email = content["email"]
+    user_password = content["password"]
+    new_user = User(email=user_email, password=user_password)
+    for k, v in content.items():
+        setattr(new_user, k, v)
+    new_user.save()
+    return jsonify(new_user.to_dict()), 201
+
+
+@app_views.route("/users/<user_id>", methods=['PUT'])
+def put_user(user_id):
+    """
+    Updates a user
+    """
     obj_list = []
     content = request.get_json()
+    user_obj = storage.get('User', user_id)
+    exclude = ['id', 'created_at', 'updated_at']
+
+    if user_obj is None:
+        abort(404)
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
-    exclude = ['id', 'created_at', 'updated_at']
-    for e in exclude:
-        content.pop(e, None)
-    json_states = storage.all("State")
-    for state_obj in json_states.values():
-        obj_list.append(state_obj)
-    for state in obj_list:
-        if state.id == state_id:
-            for k, v in content.items():
-                setattr(state, k, v)
-            new_state = state
-    if new_state is None:
-        return jsonify({"error": "Not found"}), 404
-    storage.save()
-    return jsonify(new_state.to_dict()), 200
-"""
+    for k, v in content.items():
+        if k not in exclude:
+            setattr(user_obj, k, v)
+    user_obj.save()
+    return jsonify(user_obj.to_dict()), 200
