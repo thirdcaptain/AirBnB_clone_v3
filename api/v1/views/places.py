@@ -22,7 +22,6 @@ def places(city_id):
     obj_list = []
     json_list = []
     json_places = storage.all("Place")
-    print(json_places)
     for place_obj in json_places.values():
         obj_list.append(place_obj)
     for place in obj_list:
@@ -83,6 +82,7 @@ def post_place(city_id):
 
     except Exception:
         abort(404)
+
 
 @app_views.route("/places/<place_id>", methods=['PUT'])
 def put_place(place_id):
