@@ -20,11 +20,17 @@ cors = CORS(app, resources={"/*": {"origins": "0.0.0.0"}})
 
 @app.teardown_appcontext
 def teardown(exception):
+    """
+    Teardown method to clean up
+    """
     storage.close()
 
 
 @app.errorhandler(404)
 def page_not_found(error):
+    """
+    Error method
+    """
     error_status = {"error": "Not found"}
     return make_response(jsonify(error_status), 404)
 
