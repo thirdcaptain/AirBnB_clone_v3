@@ -19,7 +19,7 @@ def cities(state_id):
     prints all cities
     """
     obj_list = []
-    json_list = []
+    city_list = []
     json_cities = storage.all("City")
 
     for city_obj in json_cities.values():
@@ -27,9 +27,10 @@ def cities(state_id):
 
     for city in obj_list:
         if city.state_id == state_id:
-            json_list.append(city.to_dict())
-            return jsonify(json_list), 200
-    return jsonify({"error": "Not found"}), 404
+            city_list.append(city.to_dict())
+    if len(city_list) == 0:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(city_list), 200
 
 
 @app_views.route("/cities/<city_id>", methods=['GET'])
