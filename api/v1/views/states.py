@@ -59,7 +59,7 @@ def delete_states(state_id):
 @app_views.route("/states", methods=['POST'])
 def post_states():
     """
-        post method
+    post method
     """
     content = request.get_json()
     if content is None:
@@ -78,7 +78,7 @@ def post_states():
 @app_views.route("/states/<state_id>", methods=['PUT'])
 def put_states(state_id):
     """
-        put method
+    put method
     """
     new_state = None
     obj_list = []

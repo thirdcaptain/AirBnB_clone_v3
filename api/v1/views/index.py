@@ -10,12 +10,18 @@ from flask import jsonify
 
 @app_views.route("/status")
 def status():
+    """
+    Status for ok
+    """
     json_status = {"status": "OK"}
     return jsonify(json_status)
 
 
 @app_views.route("/stats")
 def stats():
+    """
+    Endpoint that retrieves the number of each objects by type
+    """
     json_stats = {"amenities": storage.count("Amenity"),
                   "cities": storage.count("City"),
                   "places": storage.count("Place"),

@@ -42,6 +42,9 @@ def get_amenity(amenity_id):
 
 @app_views.route("/amenities/<amenity_id>", methods=['DELETE'])
 def delete_amenity(amenity_id):
+    """
+    Deletes an amenity
+    """
     empty_dict = {}
     try:
         json_amenity = storage.get("Amenity", amenity_id)
@@ -54,6 +57,9 @@ def delete_amenity(amenity_id):
 
 @app_views.route("/amenities", methods=['POST'])
 def post_amenities():
+    """
+    Creates an amenity
+    """
     content = request.get_json()
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
@@ -70,6 +76,9 @@ def post_amenities():
 
 @app_views.route("/amenities/<amenity_id>", methods=['PUT'])
 def put_amenities(amenity_id):
+    """
+    Updates an amenity
+    """
     new_amenity = None
     obj_list = []
     content = request.get_json()
