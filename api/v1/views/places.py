@@ -65,26 +65,24 @@ def post_place(city_id):
     """
     post a place
     """
+    if storage.get("City", city_id) is None:
+        abort(404)
+
     content = request.get_json()
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
     if "user_id" not in content:
         return jsonify({"error": "Missing user_id"}), 400
+    if storage.get("User", content["user_id"]) is None:
+        abort(404)
     if "name" not in content:
         return jsonify({"error": "Missing name"}), 400
 
-    try:
-        place_user_id = content["user_id"]
-        place_name = content["name"]
-        new_place = Place(user_id=place_user_id, name=place_name)
-        for k, v in content.items():
-            setattr(new_place, k, v)
-        setattr(new_place, "city_id", city_id)
-        storage.save()
-        return jsonify(new_place.to_dict()), 201
-
-    except Exception:
-        abort(404)
+    place_user_id = content["user_id"]
+    place_name = content["name"]
+    new_place = Place(user_id=place_user_id, name=place_name, city_id=city_id)
+    storage.save()
+    return jsonify(new_place.to_dict()), 201
 
 
 @app_views.route("/places/<place_id>", methods=['PUT'])
