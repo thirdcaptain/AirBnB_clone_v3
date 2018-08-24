@@ -18,18 +18,16 @@ def cities(state_id):
     """
     prints all cities
     """
-    obj_list = []
     city_list = []
     json_cities = storage.all("City")
 
-    for city_obj in json_cities.values():
-        obj_list.append(city_obj)
+    if storage.get("State", state_id) is None:
+        abort(404)
 
-    for city in obj_list:
-        if city.state_id == state_id:
-            city_list.append(city.to_dict())
-    if len(city_list) == 0:
-        return jsonify({"error": "Not found"}), 404
+    for city_obj in json_cities.values():
+        if city_obj.state_id == state_id:
+            city_list.append(city_obj.to_dict())
+
     return jsonify(city_list), 200
 
 
