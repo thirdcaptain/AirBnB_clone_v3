@@ -75,7 +75,7 @@ class test_DBStorage(unittest.TestCase):
             Testing all function
         '''
         storage.reload()
-        result = storage.all("")
+        result = storage.all()
         self.assertIsInstance(result, dict)
         self.assertEqual(len(result), 0)
         new = User(email="adriel@hbtn.com", password="abc")

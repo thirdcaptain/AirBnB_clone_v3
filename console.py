@@ -121,11 +121,22 @@ class HBNBCommand(cmd.Cmd):
             Prints all string representation of all instances
             based or not on the class name.
         '''
+        """
         args = args.split(" ")
         obj_list = []
         objects = storage.all(args[0])
         try:
             if args[0] != "":
+                models.classes[args[0]]
+        """
+        args = shlex.split(args)
+        obj_list = []
+        if len(args) == 0:
+            objects = storage.all()
+        else:
+            objects = storage.all(args[0])
+        try:
+            if len(args) > 0:
                 models.classes[args[0]]
         except (KeyError, NameError):
             print("** class doesn't exist **")
