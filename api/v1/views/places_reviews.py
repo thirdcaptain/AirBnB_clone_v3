@@ -19,6 +19,10 @@ def reviews(place_id):
     """
     prints all reviews
     """
+
+    if storage.get("Place", place_id) is None:
+        abort(404)
+
     obj_list = []
     json_list = []
     json_reviews = storage.all("Review")
@@ -65,25 +69,24 @@ def post_review(place_id):
     """
     post a review
     """
+    if storage.get("Place", place_id) is None:
+        abort(404)
+
     content = request.get_json()
     if content is None:
         return jsonify({"error": "Not a JSON"}), 400
     if "user_id" not in content:
         return jsonify({"error": "Missing user_id"}), 400
+    if storage.get("User", content["user_id"]) is None:
+        abort(404)
     if "text" not in content:
         return jsonify({"error": "Missing text"}), 400
 
-    try:
-        new_review = Review(user_id=content["user_id"],
-                            place_id=place_id,
-                            text=content["text"])
-        for k, v in content.items():
-            setattr(new_review, k, v)
-        storage.save()
-        return jsonify(new_review.to_dict()), 201
-
-    except Exception:
-        abort(404)
+    new_review = Review(user_id=content["user_id"],
+                        place_id=place_id,
+                        text=content["text"])
+    storage.save()
+    return jsonify(new_review.to_dict()), 201
 
 
 @app_views.route("/reviews/<review_id>", methods=['PUT'])
@@ -95,16 +98,13 @@ def put_review(review_id):
     content = request.get_json()
     exclude = ['id', 'created_at', 'updated_at', 'user_id', 'place_id']
 
-    try:
-        review_obj = storage.get('Review', review_id)
-        if review_obj is None:
-            abort(404)
-        if content is None:
-            return jsonify({"error": "Not a JSON"}), 400
-        for k, v in content.items():
-            if k not in exclude:
-                setattr(review_obj, k, v)
-        review_obj.save()
-        return jsonify(review_obj.to_dict()), 200
-    except Exception:
+    review_obj = storage.get('Review', review_id)
+    if review_obj is None:
         abort(404)
+    if content is None:
+        return jsonify({"error": "Not a JSON"}), 400
+    for k, v in content.items():
+        if k not in exclude:
+            setattr(review_obj, k, v)
+    review_obj.save()
+    return jsonify(review_obj.to_dict()), 200
