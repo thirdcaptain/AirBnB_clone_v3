@@ -31,10 +31,7 @@ def reviews(place_id):
     for review in obj_list:
         if review.place_id == place_id:
             json_list.append(review.to_dict())
-    if len(json_list) > 0:
-        return jsonify(json_list)
-    else:
-        abort(404)
+    return jsonify(json_list)
 
 
 @app_views.route("/reviews/<review_id>", methods=['GET'])
