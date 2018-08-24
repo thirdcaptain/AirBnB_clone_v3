@@ -122,7 +122,6 @@ class test_DBStorage(unittest.TestCase):
         '''
         self.assertTrue(isinstance(storage, DBStorage))
 
-
     def test_get_db_storage(self):
         """This test the get method in db_storage"""
         new_state = State(name="NewYork")
