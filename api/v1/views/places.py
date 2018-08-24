@@ -19,6 +19,9 @@ def places(city_id):
     """
     prints all places
     """
+    if storage.get("City", city_id) is None:
+        abort(404)
+
     obj_list = []
     json_list = []
     json_places = storage.all("Place")
